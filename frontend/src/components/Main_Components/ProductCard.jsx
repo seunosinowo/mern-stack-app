@@ -9,7 +9,7 @@ const ProductCard = ({product}) => {
     const bg = useColorModeValue("white", "gray.800");
     const { isOpen, onOpen, onClose } = useDisclosure()
 
-    const {deleteProduct} = useProductStore()
+    const {deleteProduct, updateProduct} = useProductStore()
     const toast = useToast()
 
     const handleDeleteProduct = async (pid) => {
@@ -31,8 +31,29 @@ const ProductCard = ({product}) => {
                 isClosable: true
             })
         }
-    }
+    };
 
+    const handleUpdateProduct = async(pid, updatedProduct) => {
+        const {success, message} = await updateProduct(pid, updatedProduct);
+        onClose();
+        if(!success){
+            toast({
+                title: "Error",
+                description: message,
+                status: "error",
+                duration: 3000,
+                isClosable: true
+            })
+        }else{
+            toast({
+                title: "Success",
+                description: "products updated successfully",
+                status: "success",
+                duration: 3000,
+                isClosable: true
+            })
+        }
+    }
 
 
   return (
@@ -69,14 +90,32 @@ const ProductCard = ({product}) => {
                 <ModalCloseButton/>
                 <ModalBody>
                     <VStack spacing={4}>
-                        <Input placeholder="Product Name" name="name" value={updatedProduct.name} />
-                        <Input placeholder="Price" name= "price" type="number" value={updatedProduct.price} />
-                        <Input placeholder="Image URL" name="image" value={updatedProduct.image} />
+                        <Input 
+                            placeholder="Product Name" 
+                            name="name" 
+                            value={updatedProduct.name} 
+                            onChange={(e) => setUpdatedProduct({...updatedProduct, name: e.target.value})}
+                        />
+
+                        <Input 
+                            placeholder="Price" 
+                            name= "price" type="number" 
+                            value={updatedProduct.price} 
+                            onChange={(e) => setUpdatedProduct({...updatedProduct, price: e.target.value})}
+                        />
+
+                        <Input 
+                            placeholder="Image URL" 
+                            name="image" 
+                            value={updatedProduct.image} 
+                            onChange={(e) => setUpdatedProduct({...updatedProduct, image: e.target.value})}
+                        />
                     </VStack>
                 </ModalBody>
 
                 <ModalFooter>
-                    <Button colorScheme="blue" mr={3}>
+                    <Button colorScheme="blue" mr={3} 
+                    onClick={() => handleUpdateProduct(product._id, updatedProduct)}>
                         Update
                     </Button>
 
