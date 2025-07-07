@@ -27,7 +27,7 @@ const HomePage = () => {
 
           {/* To map all products */}
           <SimpleGrid
-              column={{
+              columns={{
                 base:1,
                 md:2,
                 lg:3
@@ -35,16 +35,17 @@ const HomePage = () => {
               spacing={10}
               w={"full"}
           >
-            {products.map((product) => {
+            {products.map((product) => (
               <ProductCard key = {product._id} product={product}  />
-            })}
+            ))}
 
           </SimpleGrid>
 
-          <Text
-            fontsize={"xl"}
+          {products.length === 0 && (
+            <Text
+            fontSize={"xl"}
             textAlign={"center"}
-            fontweight={"bold"}
+            fontWeight={"bold"}
             color={"gray.500"}
           >
             No Products found 😢 {" "}
@@ -54,6 +55,7 @@ const HomePage = () => {
               </Text>
             </Link>
           </Text>
+          )}
       </VStack>
     </Container>
   )
